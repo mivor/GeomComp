@@ -8,6 +8,18 @@ using System.Drawing;
 
 namespace GeomComp
 {
+    class Result
+    {
+        public List<Point> Points { get; private set; }
+        public string Type { get; private set; }
+
+        public Result(List<Point> pPoints, string pType)
+        {
+            Points = new List<Point>(pPoints);
+            Type = pType;
+        }
+    }
+
     static class Program
     {
         /// <summary>
@@ -19,6 +31,27 @@ namespace GeomComp
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new View());
+        }
+        
+        public static void CreatePoints(BackgroundWorker worker, DoWorkEventArgs e)
+        {
+            Random rnd = new Random();
+            List<Point> pointCloud = new List<Point>();
+            int n = (int)e.Argument;
+
+            for (int i = 0; i < n; i++)
+            {
+                if (worker.CancellationPending)
+                {
+                    e.Cancel = true;
+                    break;
+                }
+                int x = rnd.Next(5,711);
+                int y = rnd.Next(5,471);
+                Point p = new Point(x, y);
+                pointCloud.Add(p);
+            }
+            e.Result = new Result(pointCloud, "point");
         }
 
         public static void work(BackgroundWorker worker, DoWorkEventArgs e)

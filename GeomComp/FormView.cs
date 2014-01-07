@@ -48,7 +48,7 @@ namespace GeomComp
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            if(bgWorker.IsBusy)
+            if (bgWorker.IsBusy)
             {
                 // cancel pressed
                 bgWorker.CancelAsync();
@@ -57,12 +57,12 @@ namespace GeomComp
             {
                 // start pressed
                 btnStart.Text = "Cancel";
-                bgWorker.RunWorkerAsync();
+                bgWorker.RunWorkerAsync(500);
             }
 
         }
 
-        private void draw()
+        private void drawPoints(List<Point> pPoints)
         {
             using (Graphics gx = Graphics.FromImage(image))
             {
@@ -71,17 +71,27 @@ namespace GeomComp
                 gx.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
                 gx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
 
-                // test
-                gx.DrawEllipse(new Pen(Solarized.Blue), 100, 100, 33, 33);
-                gx.DrawRectangle(new Pen(Solarized.Cyan), 75, 222, 200, 200);
-                Frame.Invalidate();
+                gx.Clear(Solarized.ImgBckg);
+
+                foreach (Point point in pPoints)
+                {
+                    drawPoint(point, gx);
+                }
             }
+            Frame.Invalidate();
+        }
+
+        private void drawPoint(Point p, Graphics gx)
+        {
+            Point corner = p;
+            corner.Offset(-1, -1);
+            gx.DrawRectangle(new Pen(Solarized.Text), corner.X, corner.Y, 3, 3);
         }
 
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            Program.work(worker, e);
+            Program.CreatePoints(worker, e);
 
         }
 
@@ -96,14 +106,14 @@ namespace GeomComp
             {
                 flashMessage("Canceled!");
             }
-            else if(e.Error != null)
+            else if (e.Error != null)
             {
                 flashMessage("E: " + e.Error.Message);
             }
             else
             {
-                draw();
-                flashMessage(e.Result.ToString() + "DONE!");
+                drawPoints(((Result)e.Result).Points);
+                flashMessage("DONE!");
             }
             btnStart.Text = "Start";
         }
