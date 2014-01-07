@@ -13,6 +13,7 @@ namespace GeomComp
     public partial class View : Form
     {
         private Bitmap image;
+        string windowName;
 
         public View()
         {
@@ -24,6 +25,7 @@ namespace GeomComp
             Frame.BackColor = Solarized.ImgBckg;
             btnStart.BackColor = Solarized.Blue;
             btnStart.ForeColor = Solarized.Base2;
+            windowName = this.Text;
 
             image = new Bitmap(Frame.Width, Frame.Height);
             using (Graphics gx = Graphics.FromImage(image))
@@ -46,6 +48,22 @@ namespace GeomComp
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+            if(bgWorker.IsBusy)
+            {
+                // cancel pressed
+                bgWorker.CancelAsync();
+            }
+            else
+            {
+                // start pressed
+                btnStart.Text = "Cancel";
+                bgWorker.RunWorkerAsync();
+            }
+
+        }
+
+        private void draw()
+        {
             using (Graphics gx = Graphics.FromImage(image))
             {
                 // uncomment for higher quality output
@@ -60,46 +78,41 @@ namespace GeomComp
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            if (bgWorker.IsBusy != true)
-            {
-                button1.Enabled = false;
-                button2.Enabled = true;
-                //button1.Text = string.Empty;
-                bgWorker.RunWorkerAsync();
-                
-            }
-        }
-
         private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
-            e.Result = Program.work(worker, e);
+            Program.work(worker, e);
 
         }
 
         private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            button1.Text = e.ProgressPercentage.ToString() + "%";
+            this.Text = e.ProgressPercentage.ToString() + "%";
         }
 
         private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (e.Cancelled == true)
             {
-                button1.Text = "Canceled";
+                flashMessage("Canceled!");
             }
             else if(e.Error != null)
             {
-                button1.Text = "E: " + e.Error.Message;
+                flashMessage("E: " + e.Error.Message);
             }
             else
             {
-                button1.Text = e.Result.ToString() + "DONE!";
+                draw();
+                flashMessage(e.Result.ToString() + "DONE!");
             }
-            button1.Enabled = true;
-            button2.Enabled = false;
+            btnStart.Text = "Start";
+        }
+
+        private async void flashMessage(string msg)
+        {
+            this.Text = msg;
+            await Task.Delay(2000);
+            this.Text = windowName;
         }
 
         private void button2_Click(object sender, EventArgs e)
