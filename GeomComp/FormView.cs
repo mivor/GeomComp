@@ -22,6 +22,8 @@ namespace GeomComp
             this.BackColor = Solarized.AppBckg;
             this.ForeColor = Solarized.Text;
             Frame.BackColor = Solarized.ImgBckg;
+            btnStart.BackColor = Solarized.Blue;
+            btnStart.ForeColor = Solarized.Base2;
 
             image = new Bitmap(Frame.Width, Frame.Height);
             using (Graphics gx = Graphics.FromImage(image))
@@ -40,6 +42,22 @@ namespace GeomComp
         private void Frame_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.DrawImage(image, 0, 0);
+        }
+
+        private void btnStart_Click(object sender, EventArgs e)
+        {
+            using (Graphics gx = Graphics.FromImage(image))
+            {
+                // uncomment for higher quality output
+                gx.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.High;
+                gx.CompositingQuality = System.Drawing.Drawing2D.CompositingQuality.HighQuality;
+                gx.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
+
+                // test
+                gx.DrawEllipse(new Pen(Solarized.Blue), 100, 100, 33, 33);
+                gx.DrawRectangle(new Pen(Solarized.Cyan), 75, 222, 200, 200);
+                Frame.Invalidate();
+            }
         }
     }
 }

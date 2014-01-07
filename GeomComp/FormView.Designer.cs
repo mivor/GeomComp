@@ -17,6 +17,7 @@
             {
                 components.Dispose();
             }
+            this.image.Dispose();
             base.Dispose(disposing);
         }
 
@@ -30,6 +31,7 @@
         {
             this.Frame = new System.Windows.Forms.PictureBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.btnStart = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.Frame)).BeginInit();
             this.SuspendLayout();
             // 
@@ -42,12 +44,24 @@
             this.Frame.TabStop = false;
             this.Frame.Paint += new System.Windows.Forms.PaintEventHandler(this.Frame_Paint);
             // 
+            // btnStart
+            // 
+            this.btnStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnStart.Location = new System.Drawing.Point(15, 15);
+            this.btnStart.Name = "btnStart";
+            this.btnStart.Size = new System.Drawing.Size(70, 30);
+            this.btnStart.TabIndex = 1;
+            this.btnStart.Text = "Start";
+            this.btnStart.UseVisualStyleBackColor = false;
+            this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
+            // 
             // View
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.AutoSize = true;
             this.ClientSize = new System.Drawing.Size(834, 492);
+            this.Controls.Add(this.btnStart);
             this.Controls.Add(this.Frame);
             this.Font = new System.Drawing.Font("Segoe UI", 10F);
             this.Margin = new System.Windows.Forms.Padding(6, 4, 6, 4);
@@ -65,6 +79,7 @@
 
         private System.Windows.Forms.PictureBox Frame;
         private System.ComponentModel.BackgroundWorker backgroundWorker1;
+        private System.Windows.Forms.Button btnStart;
     }
 }
 
