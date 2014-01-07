@@ -59,5 +59,52 @@ namespace GeomComp
                 Frame.Invalidate();
             }
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            if (bgWorker.IsBusy != true)
+            {
+                button1.Enabled = false;
+                button2.Enabled = true;
+                //button1.Text = string.Empty;
+                bgWorker.RunWorkerAsync();
+                
+            }
+        }
+
+        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = sender as BackgroundWorker;
+            e.Result = Program.work(worker, e);
+
+        }
+
+        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            button1.Text = e.ProgressPercentage.ToString() + "%";
+        }
+
+        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (e.Cancelled == true)
+            {
+                button1.Text = "Canceled";
+            }
+            else if(e.Error != null)
+            {
+                button1.Text = "E: " + e.Error.Message;
+            }
+            else
+            {
+                button1.Text = e.Result.ToString() + "DONE!";
+            }
+            button1.Enabled = true;
+            button2.Enabled = false;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            bgWorker.CancelAsync();
+        }
     }
 }
