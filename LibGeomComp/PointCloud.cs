@@ -9,7 +9,8 @@ namespace LibGeomComp
 {
     public class PointCloud
     {
-        public List<Point> Points {get; private set;}
+        public List<Point> Points {get; private set; }
+        public List<Point> MinAreaRect { get; private set; }
 
         public PointCloud(IEnumerable<Point> points)
         {
@@ -22,9 +23,24 @@ namespace LibGeomComp
             Points = new List<Point>(valuesX.Zip<int, int, Point>(valuesY, (x, y) => new Point(x, y)));
         }
 
-        public List<Point> GetSimpleMinAreaRect()
+        public IEnumerable<Point> GetSimpleMinAreaRect()
         {
-            throw new NotImplementedException();
+            Point min, max, maxXY, maxYX;
+            min = new Point(int.MaxValue, int.MaxValue);
+            max = new Point(-1, -1);
+
+            foreach (Point p in Points)
+            {
+                if (p.X < min.X) min.X = p.X;
+                if (p.Y < min.Y) min.Y = p.Y;
+                if (p.X > max.X) max.X = p.X;
+                if (p.Y > max.Y) max.Y = p.Y;
+            }
+            maxXY = new Point(max.X, min.Y);
+            maxYX = new Point(min.X, max.Y);
+            // xx, xy, yy, yx
+            MinAreaRect = new List<Point> {min, maxXY, max, maxYX};
+            return MinAreaRect;
         }
     }
 }
