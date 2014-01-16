@@ -54,27 +54,27 @@ namespace TestGeomComp
 
             result = cloud.GetSimpleMinAreaRect();
 
-            Assert.That(result, Is.EqualTo(expected));
-            Assert.That(cloud.MinAreaRect, Is.EqualTo(expected));
+            Assert.That(result, Is.EquivalentTo(expected));
+            Assert.That(cloud.MinAreaRect, Is.EquivalentTo(expected));
         }
 
         [Test]
         public void MinAreaRect()
         {
-            int[] valX = new int[] { 20, 35, 50 };
-            int[] valY = new int[] { 20, 50, 15 };
+            int[] valX = new int[] { 20, 50, 35 };
+            int[] valY = new int[] { 20, 15, 50 };
 
-            expected.Add(new Point(20, 20));
-            expected.Add(new Point(50, 15));
-            expected.Add(new Point(50, 50));
-            expected.Add(new Point(20, 50));
+            expected.Add(new Point(20, 19));
+            expected.Add(new Point(50, 14));
+            expected.Add(new Point(55, 46));
+            expected.Add(new Point(25, 51));
 
             cloud = new PointCloud(valX, valY);
 
             result = cloud.GetMinAreaRect();
 
-            Assert.That(result, Is.EqualTo(expected));
-            Assert.That(cloud.MinAreaRect, Is.EqualTo(expected));
+            Assert.That(result, Is.EquivalentTo(expected));
+            Assert.That(cloud.MinAreaRect, Is.EquivalentTo(expected));
         }
     }
 }
