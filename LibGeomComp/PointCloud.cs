@@ -42,5 +42,10 @@ namespace LibGeomComp
             MinAreaRect = new List<Point> {min, maxXY, max, maxYX};
             return MinAreaRect;
         }
+
+        public IEnumerable<Point> GetMinAreaRect()
+        {
+            throw new NotImplementedException();
+        }
     }
 }
