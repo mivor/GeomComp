@@ -57,7 +57,8 @@ namespace GeomComp
             {
                 // start pressed
                 btnStart.Text = "Cancel";
-                bgWorker.RunWorkerAsync(500);
+                Tuple<int, int, int, int, int> dimensions = new Tuple<int, int, int, int, int>(25, 100, 350, 100, 350);
+                bgWorker.RunWorkerAsync(dimensions);
             }
 
         }
@@ -88,19 +89,19 @@ namespace GeomComp
             gx.DrawRectangle(new Pen(Solarized.Text), corner.X, corner.Y, 3, 3);
         }
 
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        private void bgWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             BackgroundWorker worker = sender as BackgroundWorker;
             Program.CreatePoints(worker, e);
 
         }
 
-        private void backgroundWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        private void bgWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             this.Text = e.ProgressPercentage.ToString() + "%";
         }
 
-        private void backgroundWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        private void bgWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             if (e.Cancelled == true)
             {

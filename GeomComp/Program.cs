@@ -37,7 +37,12 @@ namespace GeomComp
         {
             Random rnd = new Random();
             List<Point> pointCloud = new List<Point>();
-            int n = (int)e.Argument;
+            Tuple<int, int, int, int, int> dims = e.Argument as Tuple<int, int, int, int, int>;
+            int n = dims.Item1;
+            int minX = dims.Item2;
+            int maxX = dims.Item3;
+            int minY = dims.Item4;
+            int maxY = dims.Item5;
 
             for (int i = 0; i < n; i++)
             {
@@ -46,8 +51,8 @@ namespace GeomComp
                     e.Cancel = true;
                     break;
                 }
-                int x = rnd.Next(5,711);
-                int y = rnd.Next(5,471);
+                int x = rnd.Next(minX, maxX);
+                int y = rnd.Next(minY, maxY);
                 Point p = new Point(x, y);
                 pointCloud.Add(p);
             }
